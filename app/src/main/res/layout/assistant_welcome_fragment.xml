@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+        <import type="android.view.View"/>
+        <variable
+            name="createAccountClickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="accountLoginClickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="genericAccountLoginClickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="remoteProvisioningClickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="viewModel"
+            type="org.linphone.activities.assistant.viewmodels.WelcomeViewModel" />
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <androidx.core.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TextView
+                    style="@style/standard_text_font"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:text="@string/assistant_welcome_title"
+                    android:textAllCaps="true" />
+
+                <TextView
+                    style="@style/standard_small_text_font"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="top"
+                    android:gravity="center"
+                    android:paddingTop="10dp"
+                    android:text="@string/assistant_welcome_desc" />
+
+                <GridLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:columnCount="1">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_columnSpan="1"
+                        android:layout_gravity="fill"
+                        android:layout_margin="10dp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+                        <CheckBox
+                            android:id="@+id/txtPrivacy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:checked="@={viewModel.termsAndPrivacyAccepted}"
+                            android:enabled="@{!viewModel.termsAndPrivacyAccepted}" />
+
+                        <TextView
+                            android:id="@+id/terms_and_privacy"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                    <TextView
+                        android:id="@+id/account_creation"
+                        style="@style/button_font"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill"
+                        android:layout_margin="20dp"
+                        android:layout_marginTop="80dp"
+                        android:background="@drawable/assistant_button"
+                        android:gravity="center"
+                        android:onClick="@{createAccountClickListener}"
+                        android:padding="10dp"
+                        android:text="Crear Usuario"
+                        android:textColor="#5D0CED" />
+
+
+                    <TextView
+                        android:id="@+id/generic_connection"
+                        style="@style/button_font"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="fill"
+                        android:layout_margin="20dp"
+                        android:background="@drawable/assistant_button"
+                        android:gravity="center"
+                        android:onClick="@{genericAccountLoginClickListener}"
+                        android:padding="10dp"
+                        android:text="Iniciar sesion"
+                        android:textColor="#5D0CED"/>
+
+                    <TextView
+                        android:id="@+id/userCreated"
+                        android:layout_width="match_parent"
+                        android:textAlignment="center"
+                        android:layout_gravity="center"
+                        android:gravity="center"
+                        android:layout_height="wrap_content"
+                        android:text="Ya tienes un usuario creado, por favor inicia sesion"
+                        android:textColor="#FF0000"
+                        />
+                </GridLayout>
+
+            </LinearLayout>
+
+        </androidx.core.widget.NestedScrollView>
+
+    </RelativeLayout>
+
+</layout>

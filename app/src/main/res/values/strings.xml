@@ -73,6 +73,7 @@
     <!-- Side menu -->
     <string name="no_account_configured">No account configured</string>
     <string name="about">About</string>
+    <string name="updated_proxy">Actualizar proxy</string>
     <string name="assistant">Iniciar sesion</string>
     <string name="recordings">Recordings</string>
     <string name="settings">Settings</string>

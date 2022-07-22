@@ -99,7 +99,6 @@
 
                 <!-- TODO: FIXME: Use AudioOnly layout -->
                 <RadioButton
-                    android:onClickListener="@{() -> conferenceViewModel.changeLayout(ConferenceLayout.Legacy)}"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="20dp"

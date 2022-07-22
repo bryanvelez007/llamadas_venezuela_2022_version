@@ -33,6 +33,7 @@ import androidx.lifecycle.ViewModelProvider
 import java.util.regex.Pattern
 import kotlinx.android.synthetic.main.assistant_activity.*
 import kotlinx.android.synthetic.main.assistant_welcome_fragment.*
+import org.linphone.LinphoneApplication
 import org.linphone.LinphoneApplication.Companion.corePreferences
 import org.linphone.R
 import org.linphone.activities.*
@@ -85,6 +86,13 @@ class WelcomeFragment : GenericFragment<AssistantWelcomeFragmentBinding>() {
 
         val prefs = PreferenceManager.getDefaultSharedPreferences(activity)
         val isRegister = prefs.getString("username", "default")
+
+        val isUpdateProxy = prefs.getString("updatedProxy", "no")
+
+        if (isUpdateProxy.equals("yes")) {
+            Toast.makeText(LinphoneApplication.coreContext.context, "IS YESSSSSSSSSSSSS", Toast.LENGTH_LONG).show()
+            navigateToGenericLoginWarning()
+        }
 
         val termAndCondition = corePreferences.readAndAgreeTermsAndPrivacy
 

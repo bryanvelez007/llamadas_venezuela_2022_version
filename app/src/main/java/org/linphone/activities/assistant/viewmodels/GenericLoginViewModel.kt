@@ -19,10 +19,19 @@
  */
 package org.linphone.activities.assistant.viewmodels
 
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
+import android.widget.Toast
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import org.linphone.LinphoneApplication.Companion.coreContext
 import org.linphone.LinphoneApplication.Companion.corePreferences
 import org.linphone.core.*
@@ -44,7 +53,7 @@ class GenericLoginViewModel(private val accountCreator: AccountCreator) : ViewMo
 
     val password = MutableLiveData<String>()
 
-    val domain = MutableLiveData<String>("voip.llamadasvenezuela.com:5077")
+    val domain: MutableLiveData<String> = MutableLiveData("voip.llamadasvenezuela.com:5077")
 
     val displayName = MutableLiveData<String>()
 
@@ -93,6 +102,8 @@ class GenericLoginViewModel(private val accountCreator: AccountCreator) : ViewMo
     }
 
     init {
+        getProxyFirebase()
+
         transport.value = TransportType.Udp
 
         loginEnabled.value = false
@@ -125,7 +136,26 @@ class GenericLoginViewModel(private val accountCreator: AccountCreator) : ViewMo
         leaveAssistantEvent.value = Event(true)
     }
 
+    fun getProxyFirebase() {
+        // Write a message to the database
+        val database = Firebase.database
+        val myRef = database.getReference("proxy")
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.getValue<String>()
+                domain.value = value
+                Toast.makeText(coreContext.context, "NUEVO PROXY: " + domain.value, Toast.LENGTH_LONG).show()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                val value = error
+            }
+        })
+    }
+
     fun createProxyConfig() {
+
         waitForServerAnswer.value = true
         coreContext.core.addListener(coreListener)
 
@@ -154,6 +184,11 @@ class GenericLoginViewModel(private val accountCreator: AccountCreator) : ViewMo
             //  corePreferences.keepServiceAlive = true
             // coreContext.notificationsManager.startForeground()
         }
+
+        val mPrefs = PreferenceManager.getDefaultSharedPreferences(coreContext.context)
+        val prefsEditor: SharedPreferences.Editor = mPrefs.edit()
+        prefsEditor.putString("updatedProxy", "no")
+        prefsEditor.commit()
     }
 
     private fun isLoginButtonEnabled(): Boolean {

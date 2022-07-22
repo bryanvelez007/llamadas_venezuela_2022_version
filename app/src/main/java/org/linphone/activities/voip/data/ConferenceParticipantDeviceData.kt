@@ -58,7 +58,7 @@ class ConferenceParticipantDeviceData(
             Log.i("[Conference Participant Device] Participant [${participantDevice.address.asStringUriOnly()}] is ${if (isSpeaking) "speaking" else "not speaking"}")
             activeSpeaker.value = isSpeaking
         }
-
+/*
         override fun onConferenceJoined(participantDevice: ParticipantDevice) {
             Log.i("[Conference Participant Device] Participant [${participantDevice.address.asStringUriOnly()}] has joined the conference")
             isInConference.value = true
@@ -70,7 +70,7 @@ class ConferenceParticipantDeviceData(
             isInConference.value = false
             updateWindowId(null)
         }
-
+*/
         override fun onStreamCapabilityChanged(
             participantDevice: ParticipantDevice,
             direction: MediaDirection,

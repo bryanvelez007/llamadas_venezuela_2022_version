@@ -28,11 +28,14 @@ import org.linphone.core.*
 import org.linphone.core.tools.Log
 
 open class StatusViewModel : ViewModel() {
+
     val registrationStatusText = MutableLiveData<Int>()
 
     val registrationStatusDrawable = MutableLiveData<Int>()
 
     val voiceMailCount = MutableLiveData<Int>()
+
+    val transport = MutableLiveData<TransportType>()
 
     private val listener: CoreListenerStub = object : CoreListenerStub() {
         override fun onAccountRegistrationStateChanged(
@@ -81,7 +84,12 @@ open class StatusViewModel : ViewModel() {
         if (defaultAccount != null) {
             state = defaultAccount.state
         }
+
         updateDefaultAccountRegistrationStatus(state)
+    }
+
+    fun setTransport(transportType: TransportType) {
+        transport.value = transportType
     }
 
     fun hello(): (RegistrationState) {
@@ -93,8 +101,6 @@ open class StatusViewModel : ViewModel() {
         if (defaultAccount != null) {
             state = defaultAccount.state
         }
-
-        // Toast.makeText(coreContext.context, "" + state, Toast.LENGTH_LONG).show()
 
         return state
     }

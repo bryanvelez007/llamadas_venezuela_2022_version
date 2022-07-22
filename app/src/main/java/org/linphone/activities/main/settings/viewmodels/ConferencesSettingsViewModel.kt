@@ -49,7 +49,7 @@ class ConferencesSettingsViewModel : GenericSettingsViewModel() {
         layoutValues.add(ConferenceLayout.Grid.toInt())
 
         labels.add(prefs.getString(R.string.conference_display_mode_audio_only))
-        layoutValues.add(ConferenceLayout.Legacy.toInt()) // TODO: FIXME: Use AudioOnly
+        // layoutValues.add(ConferenceLayout.Legacy.toInt()) // TODO: FIXME: Use AudioOnly
 
         layoutLabels.value = labels
         layoutIndex.value = layoutValues.indexOf(core.defaultConferenceLayout.toInt())

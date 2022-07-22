@@ -26,10 +26,12 @@ import org.linphone.LinphoneApplication.Companion.coreContext
 import org.linphone.LinphoneApplication.Companion.corePreferences
 import org.linphone.activities.main.settings.SettingListenerStub
 import org.linphone.activities.main.settings.viewmodels.AccountSettingsViewModel
+import org.linphone.activities.main.settings.viewmodels.AccountSettingsViewModelFactory
+import org.linphone.activities.main.settings.viewmodels.GenericSettingsViewModel
 import org.linphone.core.*
 import org.linphone.utils.LinphoneUtils
 
-class SideMenuViewModel : ViewModel() {
+class SideMenuViewModel : GenericSettingsViewModel() {
     val showAccounts: Boolean = corePreferences.showAccountsInSideMenu
     var showAssistant = false
     val showSettings: Boolean = corePreferences.showSettingsInSideMenu
@@ -47,8 +49,8 @@ class SideMenuViewModel : ViewModel() {
 
     lateinit var accountsSettingsListener: SettingListenerStub
 
-    val prefs = PreferenceManager.getDefaultSharedPreferences(coreContext.context)
-    val isLoged = prefs.getString("isLoged", "")
+    val prefs2 = PreferenceManager.getDefaultSharedPreferences(coreContext.context)
+    val isLoged = prefs2.getString("isLoged", "")
 
     private val listener: CoreListenerStub = object : CoreListenerStub() {
         override fun onAccountRegistrationStateChanged(

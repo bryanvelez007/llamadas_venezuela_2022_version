@@ -223,7 +223,7 @@ class ConferenceWaitingRoomViewModel : ViewModel() {
 
     fun setAudioOnlyLayout() {
         Log.i("[Conference Waiting Room] Set default layout to AudioOnly")
-        coreContext.core.defaultConferenceLayout = ConferenceLayout.Legacy // TODO: FIXME: Replace Legacy by AudioOnly
+        // coreContext.core.defaultConferenceLayout = ConferenceLayout.Legacy // TODO: FIXME: Replace Legacy by AudioOnly
         updateLayout()
         layoutMenuSelected.value = false
     }
@@ -293,7 +293,7 @@ class ConferenceWaitingRoomViewModel : ViewModel() {
         val core = coreContext.core
         val layout = core.defaultConferenceLayout
         isActiveSpeakerLayoutSelected.value = layout == ConferenceLayout.ActiveSpeaker
-        isAudioOnlyLayoutSelected.value = layout == ConferenceLayout.Legacy // TODO: FIXME: Replace Legacy by AudioOnly
+        // isAudioOnlyLayoutSelected.value = layout == ConferenceLayout.Legacy // TODO: FIXME: Replace Legacy by AudioOnly
 
         isVideoAvailable.value = isAudioOnlyLayoutSelected.value == false && (core.isVideoCaptureEnabled || core.isVideoPreviewEnabled)
         callParams.isVideoEnabled = isVideoAvailable.value == true && isAudioOnlyLayoutSelected.value == false

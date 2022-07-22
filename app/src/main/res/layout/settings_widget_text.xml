@@ -31,15 +31,15 @@
 
         <ImageView
             android:id="@+id/settings_commit_input"
-            android:onClick="@{() -> settingsInput.fakeImeDone(listener)}"
-            android:visibility="invisible"
-            android:contentDescription="@string/content_description_confirm_contact_edit"
             android:layout_width="20dp"
             android:layout_height="20dp"
-            android:layout_marginRight="@dimen/settings_margin"
-            android:src="@drawable/valid"
             android:layout_alignParentRight="true"
-            android:layout_centerVertical="true" />
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/settings_margin"
+            android:contentDescription="@string/content_description_confirm_contact_edit"
+            android:onClick="@{() -> settingsInput.fakeImeDone(listener)}"
+            android:src="@drawable/valid"
+            android:visibility="invisible" />
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/settings_input_layout"

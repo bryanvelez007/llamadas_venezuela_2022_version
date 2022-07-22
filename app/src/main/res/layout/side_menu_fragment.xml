@@ -26,6 +26,9 @@
             name="quitClickListener"
             type="android.view.View.OnClickListener"/>
         <variable
+            name="proxyClickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
             name="viewModel"
             type="org.linphone.activities.main.sidemenu.viewmodels.SideMenuViewModel" />
     </data>
@@ -206,11 +209,6 @@
                     android:layout_height="1dp"
                     android:background="?dividerColor" />
 
-                <View
-                    android:visibility="@{viewModel.showScheduledConferences ? View.VISIBLE : View.GONE}"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:background="?dividerColor" />
 
                 <LinearLayout
                     android:onClick="@{aboutClickListener}"
@@ -241,6 +239,32 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:background="?dividerColor" />
+
+                <LinearLayout
+                    android:onClick="@{proxyClickListener}"
+                    android:visibility="@{viewModel.showQuit ? View.VISIBLE : View.GONE}"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:padding="10dp"
+                        android:contentDescription="@string/about"
+                        android:src="@drawable/settings_advanced" />
+
+                    <TextView
+                        android:text="@string/updated_proxy"
+                        style="@style/standard_text_font"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="16dp" />
+
+                </LinearLayout>
+
+
 
             </LinearLayout>
 

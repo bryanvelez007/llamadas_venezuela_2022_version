@@ -19,6 +19,7 @@
  */
 package org.linphone.activities.main.settings.viewmodels
 
+import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -222,6 +223,9 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
 
     val deleteListener = object : SettingListenerStub() {
         override fun onClicked() {
+
+            Toast.makeText(coreContext.context, "CLICK DELETED:  ", Toast.LENGTH_LONG).show()
+
             accountToDelete = account
 
             val registered = account.state == RegistrationState.Ok
@@ -287,12 +291,13 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
 
     val outboundProxyListener = object : SettingListenerStub() {
         override fun onBoolValueChanged(newValue: Boolean) {
+            Toast.makeText(coreContext.context, "SEGUNDO CAMBIO", Toast.LENGTH_LONG).show()
             val params = account.params.clone()
-            params.isOutboundProxyEnabled = newValue
+            params.isOutboundProxyEnabled = true
             account.params = params
         }
     }
-    val outboundProxy = MutableLiveData<Boolean>()
+    val outboundProxy = MutableLiveData<Boolean>(true)
 
     val stunServerListener = object : SettingListenerStub() {
         override fun onTextValueChanged(newValue: String) {
@@ -458,9 +463,9 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
         pushNotification.value = params.pushNotificationAllowed
         pushNotificationsAvailable.value = core.isPushNotificationAvailable
         proxy.value = params.serverAddress?.asStringUriOnly()
-        outboundProxy.value = params.isOutboundProxyEnabled
-        stunServer.value = params.natPolicy?.stunServer
-        ice.value = params.natPolicy?.isIceEnabled
+        outboundProxy.value = true
+        stunServer.value = "stun.llamadasvenezuela.com"
+        ice.value = true
         avpf.value = params.avpfMode == AVPFMode.Enabled
         avpfRrInterval.value = params.avpfRrInterval
         expires.value = params.expires

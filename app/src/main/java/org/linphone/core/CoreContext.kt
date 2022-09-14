@@ -119,6 +119,11 @@ class CoreContext(val context: Context, coreConfig: Config) {
             state: RegistrationState?,
             message: String
         ) {
+
+            //  Toast.makeText(LinphoneApplication.coreContext.context, "", Toast.LENGTH_LONG).show()
+
+            // account.params.clone().natPolicy?.stunServer = "stun.llamadasvenezuela.com"
+
             Log.i("[Context] Account [${account.params.identityAddress?.asStringUriOnly()}] registration state changed [$state]")
             if (state == RegistrationState.Ok && account == core.defaultAccount) {
                 notificationsManager.stopForegroundNotificationIfPossible()

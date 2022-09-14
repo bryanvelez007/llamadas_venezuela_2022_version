@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    tools:context=".PayInApp"
+    android:orientation="vertical">
+  <com.google.android.gms.ads.AdView
+      android:id="@+id/adView"
+      android:layout_height="wrap_content"
+      android:layout_width="match_parent"
+      ads:adSize = "BANNER"
+      ads:adUnitId = "ca-app-pub-3940256099942544/6300978111">
+
+  </com.google.android.gms.ads.AdView>
+
+  <Button
+      android:id="@+id/clickButton"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="click"
+      android:layout_gravity="center"
+      android:layout_marginTop="8dp"
+      android:layout_marginBottom="8dp"/>
+  <Button
+      android:id="@+id/clickButtonR"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:text="click video"
+      android:layout_gravity="center"/>
+</LinearLayout>

@@ -19,7 +19,6 @@
  */
 package org.linphone.activities.main.settings.viewmodels
 
-import android.widget.Toast
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
@@ -63,6 +62,8 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
     val iconResource = MutableLiveData<Int>()
     val iconContentDescription = MutableLiveData<Int>()
 
+    val listenChangeStatus = MutableLiveData<Event<String>>()
+
     lateinit var accountsSettingsListener: SettingListenerStub
 
     val waitForUnregister = MutableLiveData<Boolean>()
@@ -81,6 +82,9 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
             state: RegistrationState,
             message: String
         ) {
+
+            //  Toast.makeText(coreContext.context, "", Toast.LENGTH_LONG).show()
+
             if (state == RegistrationState.Cleared && account == accountToDelete) {
                 Log.i("[Account Settings] Account to remove registration is now cleared")
                 waitForUnregister.value = false
@@ -149,6 +153,12 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
         }
     }
     val password = MutableLiveData<String>()
+
+    val statusListenerValue = object : SettingListenerStub() {
+        override fun onTextValueChanged(newValue: String) {
+            val actualStatus = account.state
+        }
+    }
 
     val domainListener = object : SettingListenerStub() {
         override fun onTextValueChanged(newValue: String) {
@@ -224,7 +234,7 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
     val deleteListener = object : SettingListenerStub() {
         override fun onClicked() {
 
-            Toast.makeText(coreContext.context, "CLICK DELETED:  ", Toast.LENGTH_LONG).show()
+            //  Toast.makeText(coreContext.context, "CLICK DELETED:  ", Toast.LENGTH_LONG).show()
 
             accountToDelete = account
 
@@ -291,7 +301,7 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
 
     val outboundProxyListener = object : SettingListenerStub() {
         override fun onBoolValueChanged(newValue: Boolean) {
-            Toast.makeText(coreContext.context, "SEGUNDO CAMBIO", Toast.LENGTH_LONG).show()
+            //  Toast.makeText(coreContext.context, "SEGUNDO CAMBIO", Toast.LENGTH_LONG).show()
             val params = account.params.clone()
             params.isOutboundProxyEnabled = true
             account.params = params
@@ -312,6 +322,7 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
                 params.natPolicy?.stunServer = newValue
                 params.natPolicy?.isStunEnabled = newValue.isNotEmpty()
             }
+
             if (newValue.isEmpty()) ice.value = false
             stunServer.value = newValue
             account.params = params
@@ -442,6 +453,10 @@ class AccountSettingsViewModel(val account: Account) : GenericSettingsViewModel(
             displayName.value = identityAddress.displayName ?: ""
             identity.value = identityAddress.asStringUriOnly()
         }
+
+        listenChangeStatus.value = Event("NEW EVENT STSTAUS")
+
+        //  Toast.makeText(coreContext.context, "::: " + account.state, Toast.LENGTH_LONG).show()
 
         iconResource.value = when (account.state) {
             RegistrationState.Ok -> R.drawable.led_registered

@@ -241,8 +241,9 @@
                     android:background="?dividerColor" />
 
                 <LinearLayout
+                    android:id="@+id/side_menu_proxy"
                     android:onClick="@{proxyClickListener}"
-                    android:visibility="@{viewModel.showQuit ? View.VISIBLE : View.GONE}"
+                    android:visibility="@{viewModel.showProxy ? View.VISIBLE : View.GONE}"
                     android:layout_width="match_parent"
                     android:layout_height="45dp">
 

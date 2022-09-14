@@ -548,6 +548,12 @@ class CorePreferences constructor(private val context: Context) {
     val showQuitInSideMenu: Boolean
         get() = config.getBool("app", "side_menu_quit", true)
 
+    var showProxyInSideMenu: Boolean
+        get() = config.getBool("app", "side_menu_proxy", true)
+        set(value) {
+            config.setBool("app", "side_menu_proxy", value)
+        }
+
     /* Settings */
 
     val allowDtlsTransport: Boolean

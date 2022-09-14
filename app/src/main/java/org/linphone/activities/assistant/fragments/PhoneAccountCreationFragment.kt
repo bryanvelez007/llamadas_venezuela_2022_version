@@ -34,6 +34,12 @@ import android.webkit.WebView
 import android.webkit.WebViewClient
 import androidx.annotation.RequiresApi
 import androidx.lifecycle.ViewModelProvider
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import org.linphone.R
 import org.linphone.activities.assistant.AssistantActivity
 import org.linphone.activities.assistant.viewmodels.PhoneAccountCreationViewModel
@@ -55,6 +61,8 @@ class PhoneAccountCreationFragment :
         super.onViewCreated(view, savedInstanceState)
 
         binding.lifecycleOwner = viewLifecycleOwner
+
+        val myWebView: WebView = view.findViewById(R.id.WebView1)
 
         val sharedPreferences: SharedPreferences = PreferenceManager.getDefaultSharedPreferences(activity)
         val editor: SharedPreferences.Editor = sharedPreferences.edit()
@@ -84,8 +92,6 @@ class PhoneAccountCreationFragment :
         // val btnFinalRegister = view.findViewById(R.id.btnGoToSignIn) as Button
         // btnFinalRegister.visibility = View.INVISIBLE
 
-        val myWebView: WebView = view.findViewById(R.id.WebView1)
-
         myWebView.webViewClient = object : WebViewClient() {
             override fun shouldOverrideUrlLoading(
                 view: WebView,
@@ -96,12 +102,30 @@ class PhoneAccountCreationFragment :
                 return true
             }
         }
-        myWebView.webViewClient = MyWebViewClient(requireActivity())
-        myWebView.loadUrl("http://voip.llamadasvenezuela.com/mbilling/index.php/signup/add")
-        myWebView.settings.javaScriptEnabled = true
-        myWebView.settings.allowContentAccess = true
-        myWebView.settings.domStorageEnabled = true
-        myWebView.settings.useWideViewPort = true
+
+        // Write a message to the database
+        val database = Firebase.database
+        val myRef = database.getReference("urlRegister")
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.getValue<String>()
+                if (value != null) {
+                    myWebView.webViewClient = MyWebViewClient(requireActivity())
+                    myWebView.loadUrl(value)
+                    myWebView.settings.javaScriptEnabled = true
+                    myWebView.settings.allowContentAccess = true
+                    myWebView.settings.domStorageEnabled = true
+                    myWebView.settings.useWideViewPort = true
+                }
+
+                //   Toast.makeText(LinphoneApplication.coreContext.context, "CAMBIANDO URL: " + value, Toast.LENGTH_LONG).show()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                val value = error
+            }
+        })
 
         sharedViewModel = requireActivity().run {
             ViewModelProvider(this)[SharedAssistantViewModel::class.java]

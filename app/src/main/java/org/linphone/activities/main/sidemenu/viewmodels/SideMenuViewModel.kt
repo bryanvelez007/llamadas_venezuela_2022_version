@@ -22,16 +22,20 @@ package org.linphone.activities.main.sidemenu.viewmodels
 import android.preference.PreferenceManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import org.linphone.LinphoneApplication.Companion.coreContext
 import org.linphone.LinphoneApplication.Companion.corePreferences
 import org.linphone.activities.main.settings.SettingListenerStub
 import org.linphone.activities.main.settings.viewmodels.AccountSettingsViewModel
-import org.linphone.activities.main.settings.viewmodels.AccountSettingsViewModelFactory
-import org.linphone.activities.main.settings.viewmodels.GenericSettingsViewModel
 import org.linphone.core.*
 import org.linphone.utils.LinphoneUtils
 
-class SideMenuViewModel : GenericSettingsViewModel() {
+class SideMenuViewModel : ViewModel() {
     val showAccounts: Boolean = corePreferences.showAccountsInSideMenu
     var showAssistant = false
     val showSettings: Boolean = corePreferences.showSettingsInSideMenu
@@ -40,6 +44,7 @@ class SideMenuViewModel : GenericSettingsViewModel() {
         LinphoneUtils.isRemoteConferencingAvailable()
     val showAbout: Boolean = corePreferences.showAboutInSideMenu
     val showQuit: Boolean = corePreferences.showQuitInSideMenu
+    val showProxy: Boolean = corePreferences.showProxyInSideMenu
 
     val defaultAccountViewModel = MutableLiveData<AccountSettingsViewModel>()
     val defaultAccountFound = MutableLiveData<Boolean>()
@@ -59,6 +64,9 @@ class SideMenuViewModel : GenericSettingsViewModel() {
             state: RegistrationState,
             message: String
         ) {
+
+            //  account.params.clone().natPolicy?.stunServer = "stun.llamadasvenezuela.com"
+
             if (isLoged != "yes") {
                 showAssistant = true
             }
@@ -76,6 +84,8 @@ class SideMenuViewModel : GenericSettingsViewModel() {
         defaultAccountFound.value = false
         defaultAccountAvatar.value = corePreferences.defaultAccountAvatarPath
 
+        getProxyFirebase()
+
         if (isLoged != "yes") {
             showAssistant = true
         }
@@ -92,6 +102,28 @@ class SideMenuViewModel : GenericSettingsViewModel() {
         accounts.value.orEmpty().forEach(AccountSettingsViewModel::destroy)
         coreContext.core.removeListener(listener)
         super.onCleared()
+    }
+
+    fun getProxyFirebase() {
+        // Write a message to the database
+        val database = Firebase.database
+        val myRef = database.getReference("proxyButton")
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.getValue<Boolean>()
+                if (value != null) {
+                    corePreferences.showProxyInSideMenu = value
+                    updateAccountsList()
+                }
+
+                //   Toast.makeText(coreContext.context, "OCULTANDO BOTON: " + value, Toast.LENGTH_LONG).show()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                val value = error
+            }
+        })
     }
 
     fun updateAccountsList() {

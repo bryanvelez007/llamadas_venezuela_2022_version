@@ -21,7 +21,6 @@ package org.linphone.activities.assistant.viewmodels
 
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
-import android.widget.Toast
 import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -145,7 +144,7 @@ class GenericLoginViewModel(private val accountCreator: AccountCreator) : ViewMo
             override fun onDataChange(snapshot: DataSnapshot) {
                 val value = snapshot.getValue<String>()
                 domain.value = value
-                Toast.makeText(coreContext.context, "NUEVO PROXY: " + domain.value, Toast.LENGTH_LONG).show()
+                // Toast.makeText(coreContext.context, "NUEVO PROXY: " + domain.value, Toast.LENGTH_LONG).show()
             }
 
             override fun onCancelled(error: DatabaseError) {

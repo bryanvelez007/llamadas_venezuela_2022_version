@@ -19,6 +19,8 @@
  */
 package org.linphone.activities.main.viewmodels
 
+import android.content.SharedPreferences
+import android.preference.PreferenceManager
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import java.util.*
@@ -44,6 +46,12 @@ open class StatusViewModel : ViewModel() {
             state: RegistrationState,
             message: String
         ) {
+            //  Toast.makeText(coreContext.context, "", Toast.LENGTH_LONG).show()
+            account.params.clone().natPolicy?.stunServer = "stun.llamadasvenezuela.com"
+            //     account.params.clone().natPolicy?.isIceEnabled = true
+
+            //  Toast.makeText(coreContext.context, "" + account.params.clone().natPolicy?.stunServer, Toast.LENGTH_LONG).show()
+
             if (account == core.defaultAccount) {
                 updateDefaultAccountRegistrationStatus(state)
             } else if (core.accountList.isEmpty()) {
@@ -92,11 +100,12 @@ open class StatusViewModel : ViewModel() {
         transport.value = transportType
     }
 
-    fun hello(): (RegistrationState) {
+    fun hello(account: Account): (RegistrationState) {
         val core = coreContext.core
         core.addListener(listener)
 
         var state: RegistrationState = RegistrationState.None
+        account.params.clone().natPolicy?.stunServer = "stun.llamadasvenezuela.com"
         val defaultAccount = core.defaultAccount
         if (defaultAccount != null) {
             state = defaultAccount.state
@@ -120,7 +129,14 @@ open class StatusViewModel : ViewModel() {
     }
 
     private fun getStatusIconText(state: RegistrationState): Int {
-        // Toast.makeText(coreContext.context, "" + state, Toast.LENGTH_LONG).show()
+
+        if (state.toInt() == 4) {
+
+            val mPrefs = PreferenceManager.getDefaultSharedPreferences(coreContext.context)
+            val prefsEditor: SharedPreferences.Editor = mPrefs.edit()
+            prefsEditor.putString("updatedProxy", "yes")
+            prefsEditor.commit()
+        }
         return when (state) {
             RegistrationState.Ok -> R.string.status_connected
             RegistrationState.Progress -> R.string.status_in_progress

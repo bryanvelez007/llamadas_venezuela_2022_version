@@ -63,6 +63,11 @@ class StatusFragment : GenericFragment<StatusFragmentBinding>() {
             if (defaultAccount != null) {
                 viewModel.updateDefaultAccountRegistrationStatus(defaultAccount.state)
             }
+
+            if (defaultAccount != null) {
+                val stated = defaultAccount.state
+                verifyStatusLogin(stated)
+            }
         }
 
         binding.setMenuClickListener {
@@ -71,6 +76,12 @@ class StatusFragment : GenericFragment<StatusFragmentBinding>() {
 
         binding.setRefreshClickListener {
             viewModel.refreshRegister()
+
+            val defaultAccount = coreContext.core.defaultAccount
+            if (defaultAccount != null) {
+                val stated = defaultAccount.state
+                verifyStatusLogin(stated)
+            }
         }
 
         val defaultAccount = coreContext.core.defaultAccount
@@ -93,7 +104,21 @@ class StatusFragment : GenericFragment<StatusFragmentBinding>() {
             editor.commit()
         }
 
-        if (RegistrationState.Failed == state) {
+        //  Toast.makeText(LinphoneApplication.coreContext.context, "STATUS:: " + state, Toast.LENGTH_LONG).show()
+
+        if (state.toInt() == 4) {
+            editor.putString("isLoged", "no")
+            editor.putString("updatedProxy", "yes")
+            editor.apply()
+            editor.commit()
+            val intent = Intent(activity, AssistantActivity::class.java)
+            startActivity(intent)
+        } else if (RegistrationState.Failed == state) {
+
+            editor.putString("isLoged", "no")
+            editor.putString("updatedProxy", "yes")
+            editor.apply()
+            editor.commit()
             val intent = Intent(activity, AssistantActivity::class.java)
             startActivity(intent)
         }

@@ -20,22 +20,32 @@
 package org.linphone.activities.main.sidemenu.fragments
 
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
 import android.os.Parcelable
 import android.provider.MediaStore
 import android.view.View
+import android.widget.Toast
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.lifecycleScope
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
+import com.google.firebase.database.ktx.database
+import com.google.firebase.database.ktx.getValue
+import com.google.firebase.ktx.Firebase
 import java.io.File
+import kotlinx.android.synthetic.main.side_menu_fragment.*
 import kotlinx.coroutines.launch
+import org.linphone.LinphoneApplication
 import org.linphone.LinphoneApplication.Companion.coreContext
 import org.linphone.R
 import org.linphone.activities.*
 import org.linphone.activities.assistant.AssistantActivity
 import org.linphone.activities.main.settings.SettingListenerStub
-import org.linphone.activities.main.settings.viewmodels.AccountSettingsViewModelFactory
 import org.linphone.activities.main.sidemenu.viewmodels.SideMenuViewModel
 import org.linphone.activities.main.viewmodels.SharedMainViewModel
 import org.linphone.core.tools.Log
@@ -55,14 +65,7 @@ class SideMenuFragment : GenericFragment<SideMenuFragmentBinding>() {
         super.onViewCreated(view, savedInstanceState)
         binding.lifecycleOwner = viewLifecycleOwner
 
-        val identity = arguments?.getString("Identity")
-        if (identity == null) {
-            Log.e("[Account Settings] Identity is null, aborting!")
-            goBack()
-            return
-        }
-
-        viewModel = ViewModelProvider(this, AccountSettingsViewModelFactory(identity))[SideMenuViewModel::class.java]
+        viewModel = ViewModelProvider(this)[SideMenuViewModel::class.java]
         binding.viewModel = viewModel
 
         sharedViewModel = requireActivity().run {
@@ -125,7 +128,47 @@ class SideMenuFragment : GenericFragment<SideMenuFragmentBinding>() {
             coreContext.stop()
         }
 
+        binding.setProxyClickListener {
+            getProxyFirebase()
+        }
+
         onBackPressedCallback.isEnabled = false
+    }
+
+    fun getProxyFirebase() {
+
+        val nameFile = requireContext().packageName + "_preferences"
+        val preferences = this.requireActivity().getSharedPreferences(nameFile, Context.MODE_PRIVATE)
+        val editor: SharedPreferences.Editor = preferences.edit()
+
+        // Write a message to the database
+        val database = Firebase.database
+        val myRef = database.getReference("proxyButton")
+
+        myRef.addValueEventListener(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val value = snapshot.getValue<Boolean>()
+                if (value != null) {
+                    LinphoneApplication.corePreferences.showProxyInSideMenu = value
+
+                    if (value == true) {
+                        editor.putString("isLoged", "no")
+                        editor.putString("updatedProxy", "yes")
+                        editor.apply()
+                        editor.commit()
+
+                        val intent = Intent(activity, AssistantActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        Toast.makeText(coreContext.context, "Esta opcion no esta habilitado en el momento: " + value, Toast.LENGTH_LONG).show()
+                    }
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                val value = error
+            }
+        })
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

@@ -28,12 +28,10 @@ import android.text.Spanned
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.view.View
-import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import java.util.regex.Pattern
 import kotlinx.android.synthetic.main.assistant_activity.*
 import kotlinx.android.synthetic.main.assistant_welcome_fragment.*
-import org.linphone.LinphoneApplication
 import org.linphone.LinphoneApplication.Companion.corePreferences
 import org.linphone.R
 import org.linphone.activities.*
@@ -90,7 +88,7 @@ class WelcomeFragment : GenericFragment<AssistantWelcomeFragmentBinding>() {
         val isUpdateProxy = prefs.getString("updatedProxy", "no")
 
         if (isUpdateProxy.equals("yes")) {
-            Toast.makeText(LinphoneApplication.coreContext.context, "IS YESSSSSSSSSSSSS", Toast.LENGTH_LONG).show()
+            //  Toast.makeText(LinphoneApplication.coreContext.context, "IS YESSSSSSSSSSSSS", Toast.LENGTH_LONG).show()
             navigateToGenericLoginWarning()
         }
 
@@ -118,7 +116,7 @@ class WelcomeFragment : GenericFragment<AssistantWelcomeFragmentBinding>() {
 
         txtPrivacy.setOnClickListener {
 
-            Toast.makeText(requireContext(), "Click", Toast.LENGTH_SHORT).show()
+            //   Toast.makeText(requireContext(), "Click", Toast.LENGTH_SHORT).show()
             generic_connection.visibility = View.VISIBLE
             account_creation.visibility = View.VISIBLE
             account_creation.isEnabled = true

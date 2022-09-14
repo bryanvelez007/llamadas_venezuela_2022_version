@@ -2,9 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
 package="org.linphone">
     <uses-permission android:name="android.permission.INTERNET" />
-<uses-permission android:name="android.permission.READ_CONTACTS" />
-<uses-permission android:name="android.permission.WRITE_CONTACTS" />
-
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
+    <uses-permission android:name="android.permission.WRITE_CONTACTS" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 <!-- Helps filling phone number and country code in assistant -->
 <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
@@ -23,12 +23,12 @@ package="org.linphone">
     android:maxSdkVersion="28" />
 
 <!-- Both permissions below are for contacts sync account -->
-<uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
-<uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.AUTHENTICATE_ACCOUNTS" />
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
 
 <!-- Needed for Telecom Manager -->
-<uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
-<uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
+    <uses-permission android:name="android.permission.MANAGE_OWN_CALLS" />
+    <uses-permission android:name="android.permission.READ_PHONE_NUMBERS" />
 
 <!-- Needed for overlay -->
 <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
@@ -124,7 +124,7 @@ package="org.linphone">
     </activity>
 
     <activity
-        android:name=".activities.main.MainActivity"
+        android:name=".PayInApp"
         android:exported="true"
         android:launchMode="singleTask"
         android:windowSoftInputMode="adjustResize">
@@ -239,6 +239,11 @@ package="org.linphone">
             android:name="android.support.FILE_PROVIDER_PATHS"
             android:resource="@xml/provider_paths" />
     </provider>
+
+    <meta-data
+        android:name="com.google.android.gms.ads.APPLICATION_ID"
+        android:value="ca-app-pub-8343032550150155~3687527325"
+        />
 
 </application>
 

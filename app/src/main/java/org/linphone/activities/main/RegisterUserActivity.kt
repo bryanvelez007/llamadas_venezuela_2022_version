@@ -13,6 +13,8 @@ class RegisterUserActivity : AppCompatActivity() {
 
         val myWebView: WebView = findViewById(R.id.webview)
 
+        //  Toast.makeText(this, "EN EL REGISTRO", Toast.LENGTH_SHORT).show()
+
         myWebView.loadUrl("http://voip.llamadasvenezuela.com/mbilling/index.php/signup/add")
         // this will enable the javascript settings
         myWebView.settings.javaScriptEnabled = true

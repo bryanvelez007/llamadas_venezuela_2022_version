@@ -12,7 +12,7 @@ def appVersionName = "4.7.0"
 def appVersionCode = 40690 // 4.06.00
 
 static def getPackageName() {
-    return "org.llamadasvzl"
+    return "org.llamadasvzlplus"
 }
 
 def firebaseEnabled = new File(projectDir.absolutePath +'/google-services.json').exists()
@@ -96,7 +96,7 @@ android {
         targetSdkVersion 31
         versionCode appVersionCode
         versionName "${project.version}"
-        applicationId getPackageName()
+        applicationId "org.llamadasvzlplus"
     }
 
     applicationVariants.all { variant ->
@@ -205,6 +205,12 @@ android {
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
+
+    implementation 'com.google.android.gms:play-services-ads:19.1.0'
+    implementation 'com.google.firebase:firebase-analytics:17.4.1'
+    implementation 'com.google.firebase:firebase-auth:19.3.1'
+    implementation 'com.google.android.gms:play-services-auth:18.0.0'
+
     implementation 'androidx.appcompat:appcompat:1.4.1'
     implementation 'androidx.media:media:1.4.3'
     implementation 'androidx.fragment:fragment-ktx:1.4.1'
@@ -251,6 +257,9 @@ dependencies {
 
 
     implementation 'org.linphone:linphone-sdk-android:5.2+'
+
+    implementation 'com.android.billingclient:billing:2.0.3'
+
 
     // Only enable leak canary prior to release
     //debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'

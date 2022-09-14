@@ -61,6 +61,14 @@ class AccountSettingsFragment : GenericSettingFragment<SettingsAccountFragmentBi
 
         binding.setBackClickListener { goBack() }
 
+        // Toast.makeText(LinphoneApplication.coreContext.context, "FUCKKK", Toast.LENGTH_LONG).show()
+
+        viewModel.listenChangeStatus.observe(
+            viewLifecycleOwner
+        ) {
+            //    Toast.makeText(requireContext(), "NEWWW MESSAGE STSUSITO", Toast.LENGTH_SHORT).show()
+        }
+
         viewModel.linkPhoneNumberEvent.observe(
             viewLifecycleOwner
         ) {

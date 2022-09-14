@@ -32,6 +32,7 @@ import android.view.Gravity
 import android.view.MotionEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
+import android.widget.Button
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
@@ -44,6 +45,7 @@ import androidx.navigation.NavController
 import androidx.navigation.NavDestination
 import androidx.navigation.findNavController
 import androidx.window.layout.FoldingFeature
+import com.android.billingclient.api.*
 import com.android.volley.RequestQueue
 import com.android.volley.toolbox.Volley
 import com.google.android.material.snackbar.Snackbar
@@ -72,6 +74,7 @@ class MainActivity : GenericActivity(), SnackBarActivity, NavController.OnDestin
     private lateinit var binding: MainActivityBinding
     private lateinit var sharedViewModel: SharedMainViewModel
     private lateinit var callOverlayViewModel: CallOverlayViewModel
+    private lateinit var button: Button
 
     private val listener = object : ContactsUpdatedListenerStub() {
         override fun onContactsUpdated() {
@@ -175,6 +178,54 @@ class MainActivity : GenericActivity(), SnackBarActivity, NavController.OnDestin
             } catch (se: SecurityException) {
                 Log.e("[Main Activity] Security exception when doing reportFullyDrawn(): $se")
             }
+        }
+
+        button = findViewById(R.id.buyNow)
+
+        val skuList = ArrayList<String>()
+        skuList.add("test.sample1")
+
+        val purchasesUpdatedListener = PurchasesUpdatedListener {
+            billingResult, purchses ->
+        }
+
+        var billingClient = BillingClient.newBuilder(this)
+            .setListener(purchasesUpdatedListener)
+            .enablePendingPurchases().build()
+
+        button.setOnClickListener {
+
+            billingClient.startConnection(object : BillingClientStateListener {
+                override fun onBillingServiceDisconnected() {
+//                    TODO("Not yet implemented")
+                    Log.e("************ DISCONECETED *********************")
+                }
+
+                override fun onBillingSetupFinished(billingResult: BillingResult) {
+//                    TODO("Not yet implemented")
+
+                    Log.e("************ finished *********************")
+
+                    if (billingResult.responseCode == BillingClient.BillingResponseCode.OK) {
+
+                        val params = SkuDetailsParams.newBuilder()
+                        params.setSkusList(skuList)
+                            .setType(BillingClient.SkuType.INAPP)
+
+                        billingClient.querySkuDetailsAsync(params.build()) {
+                            billingResult, skuDetailsList ->
+
+                            for (skuDetails in skuDetailsList!!) {
+                                val flowPurchase = BillingFlowParams.newBuilder()
+                                    .setSkuDetails(skuDetails)
+                                    .build()
+
+                                val responseCode = billingClient.launchBillingFlow(this@MainActivity, flowPurchase).responseCode
+                            }
+                        }
+                    }
+                }
+            })
         }
     }
 

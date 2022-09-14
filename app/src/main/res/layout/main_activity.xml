@@ -70,6 +70,12 @@
 
         </RelativeLayout>
 
+        <Button
+            android:id="@+id/buyNow"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Buy Now "/>
+
     </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
 </layout>

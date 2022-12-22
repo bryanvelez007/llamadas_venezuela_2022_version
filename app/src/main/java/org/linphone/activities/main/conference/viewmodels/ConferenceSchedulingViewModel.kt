@@ -23,7 +23,6 @@ import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.MutableLiveData
 import java.util.*
 import org.linphone.LinphoneApplication.Companion.coreContext
-import org.linphone.R
 import org.linphone.activities.main.conference.data.ConferenceSchedulingParticipantData
 import org.linphone.activities.main.conference.data.Duration
 import org.linphone.activities.main.conference.data.TimeZoneData
@@ -83,58 +82,6 @@ class ConferenceSchedulingViewModel : ContactsSelectionViewModel() {
         }
     }
 
-    private val listener = object : ConferenceSchedulerListenerStub() {
-        override fun onStateChanged(
-            conferenceScheduler: ConferenceScheduler,
-            state: ConferenceSchedulerState
-        ) {
-            Log.i("[Conference Creation] Conference scheduler state is $state")
-            if (state == ConferenceSchedulerState.Ready) {
-                val conferenceAddress = conferenceScheduler.info?.uri
-                Log.i("[Conference Creation] Conference info created, address will be ${conferenceAddress?.asStringUriOnly()}")
-                conferenceAddress ?: return
-
-                address.value = conferenceAddress!!
-
-                if (sendInviteViaChat.value == true) {
-                    // Send conference info even when conf is not scheduled for later
-                    // as the conference server doesn't invite participants automatically
-                    val chatRoomParams = coreContext.core.createDefaultChatRoomParams()
-                    chatRoomParams.backend = ChatRoomBackend.FlexisipChat
-                    chatRoomParams.isGroupEnabled = false
-                    chatRoomParams.isEncryptionEnabled = true
-                    chatRoomParams.subject = subject.value
-                    conferenceScheduler.sendInvitations(chatRoomParams)
-                } else {
-                    conferenceCreationInProgress.value = false
-                    conferenceCreationCompletedEvent.value = Event(Pair(conferenceAddress.asStringUriOnly(), conferenceScheduler.info?.subject))
-                }
-            }
-        }
-
-        override fun onInvitationsSent(
-            conferenceScheduler: ConferenceScheduler,
-            failedInvitations: Array<out Address>?
-        ) {
-            Log.i("[Conference Creation] Conference information successfully sent to all participants")
-            conferenceCreationInProgress.value = false
-
-            if (failedInvitations?.isNotEmpty() == true) {
-                for (address in failedInvitations) {
-                    Log.e("[Conference Creation] Conference information wasn't sent to participant ${address.asStringUriOnly()}")
-                }
-                onMessageToNotifyEvent.value = Event(R.string.conference_schedule_info_not_sent_to_participant)
-            }
-
-            val conferenceAddress = conferenceScheduler.info?.uri
-            if (conferenceAddress == null) {
-                Log.e("[Conference Creation] Conference address is null!")
-            } else {
-                conferenceCreationCompletedEvent.value = Event(Pair(conferenceAddress.asStringUriOnly(), conferenceScheduler.info?.subject))
-            }
-        }
-    }
-
     init {
         sipContactsSelected.value = true
 
@@ -164,12 +111,9 @@ class ConferenceSchedulingViewModel : ContactsSelectionViewModel() {
         continueEnabled.addSource(formattedTime) {
             continueEnabled.value = allMandatoryFieldsFilled()
         }
-
-        conferenceScheduler.addListener(listener)
     }
 
     override fun onCleared() {
-        conferenceScheduler.removeListener(listener)
         participantsData.value.orEmpty().forEach(ConferenceSchedulingParticipantData::destroy)
 
         super.onCleared()

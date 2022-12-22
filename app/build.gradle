@@ -235,6 +235,8 @@ dependencies {
     implementation 'com.google.android.material:material:1.5.0'
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
 
+    implementation 'com.irozon.alertview:alertview:1.0.1'
+
     implementation 'androidx.emoji:emoji:1.1.0'
     implementation 'androidx.emoji:emoji-bundled:1.1.0'
 
@@ -259,6 +261,8 @@ dependencies {
     implementation 'org.linphone:linphone-sdk-android:5.2+'
 
     implementation 'com.android.billingclient:billing:2.0.3'
+    implementation 'com.github.AnupKumarPanwar:ScratchView:1.9.1'
+    implementation 'com.google.android.material:material:1.1.0'
 
 
     // Only enable leak canary prior to release

@@ -31,6 +31,12 @@
         <variable
             name="viewModel"
             type="org.linphone.activities.main.sidemenu.viewmodels.SideMenuViewModel" />
+        <variable
+            name="rewardClickListener"
+            type="android.view.View.OnClickListener"/>
+        <variable
+            name="shopClickListener"
+            type="android.view.View.OnClickListener"/>
     </data>
 
     <RelativeLayout
@@ -265,7 +271,55 @@
 
                 </LinearLayout>
 
+                <LinearLayout
+                    android:id="@+id/side_menu_reward"
+                    android:onClick="@{rewardClickListener}"
+                    android:visibility="@{viewModel.showQuit ? View.VISIBLE : View.GONE}"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp">
 
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:padding="10dp"
+                        android:contentDescription="@string/about"
+                        android:src="@drawable/ic_reward" />
+
+                    <TextView
+                        android:text="@string/reward_minutes"
+                        style="@style/standard_text_font"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="16dp" />
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/side_menu_shop"
+                    android:onClick="@{shopClickListener}"
+                    android:visibility="@{viewModel.showQuit ? View.VISIBLE : View.GONE}"
+                    android:layout_width="match_parent"
+                    android:layout_height="45dp">
+
+                    <ImageView
+                        android:layout_width="45dp"
+                        android:layout_height="45dp"
+                        android:padding="10dp"
+                        android:contentDescription="@string/about"
+                        android:src="@drawable/ic_baseline_shopping_cart_24" />
+
+                    <TextView
+                        android:text="@string/reward_shop"
+                        style="@style/standard_text_font"
+                        android:layout_width="match_parent"
+                        android:layout_height="45dp"
+                        android:gravity="center_vertical"
+                        android:paddingLeft="5dp"
+                        android:paddingRight="16dp" />
+
+                </LinearLayout>
 
             </LinearLayout>
 

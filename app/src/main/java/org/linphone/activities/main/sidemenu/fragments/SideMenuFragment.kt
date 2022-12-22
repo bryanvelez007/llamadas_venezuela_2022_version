@@ -42,7 +42,9 @@ import kotlinx.android.synthetic.main.side_menu_fragment.*
 import kotlinx.coroutines.launch
 import org.linphone.LinphoneApplication
 import org.linphone.LinphoneApplication.Companion.coreContext
+import org.linphone.PayInApp
 import org.linphone.R
+import org.linphone.Shop
 import org.linphone.activities.*
 import org.linphone.activities.assistant.AssistantActivity
 import org.linphone.activities.main.settings.SettingListenerStub
@@ -114,6 +116,15 @@ class SideMenuFragment : GenericFragment<SideMenuFragmentBinding>() {
             navigateToAbout()
         }
 
+        binding.setRewardClickListener {
+            val intent = Intent(activity, PayInApp::class.java)
+            startActivity(intent)
+        }
+
+        binding.setShopClickListener {
+            val intent = Intent(activity, Shop::class.java)
+            startActivity(intent)
+        }
         binding.setConferencesClickListener {
             sharedViewModel.toggleDrawerEvent.value = Event(true)
             navigateToScheduledConferences()

@@ -74,6 +74,8 @@
     <string name="no_account_configured">No account configured</string>
     <string name="about">About</string>
     <string name="updated_proxy">Actualizar proxy</string>
+    <string name="reward_minutes">Ganar minutos</string>
+    <string name="reward_shop">Tienda</string>
     <string name="assistant">Iniciar sesion</string>
     <string name="recordings">Recordings</string>
     <string name="settings">Settings</string>
@@ -816,4 +818,7 @@
     <string name="content_description_toggle_layout_menu">Show or hide conference layout menu</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="car_rent">Title 1</string>
+    <string name="expand_all">Description 1</string>
+    <string name="restaurants">Title 2</string>
 </resources>

@@ -1,9 +1,14 @@
 package org.linphone
 
+import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.cardview.widget.CardView
+import com.anupkumarpanwar.scratchview.ScratchView
 import com.google.android.gms.ads.*
 import com.google.android.gms.ads.reward.RewardedVideoAd
 import com.google.android.gms.ads.reward.RewardedVideoAdListener
@@ -18,6 +23,38 @@ class PayInApp : AppCompatActivity(), RewardedVideoAdListener {
         setContentView(R.layout.activity_pay_in_app)
 
         MobileAds.initialize(this)
+
+        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this)
+
+        mRewardedVideoAd.loadAd(
+            "ca-app-pub-3940256099942544/5224354917",
+            AdRequest.Builder().build()
+        )
+
+        val cardView = findViewById<CardView>(R.id.cardView)
+
+        val scratchView = findViewById<ScratchView>(R.id.scratch_view)
+        scratchView.setRevealListener(object : ScratchView.IRevealListener {
+            override fun onRevealed(scratchView: ScratchView) {
+                Toast.makeText(applicationContext, "revelead", Toast.LENGTH_LONG).show()
+
+                val timer = object : CountDownTimer(4000, 1000) {
+                    override fun onTick(millisUntilFinished: Long) {
+                    }
+
+                    override fun onFinish() {
+                        Toast.makeText(applicationContext, "revelead AGAIN", Toast.LENGTH_LONG).show()
+                        val intent = Intent(this@PayInApp, Reward::class.java)
+                        startActivity(intent)
+                        finish()
+                    }
+                }
+                timer.start()
+            }
+            override fun onRevealPercentChangedListener(scratchView: ScratchView, percent: Float) {
+                Log.d("Revealed", percent.toString())
+            }
+        })
 
         // using Banner ads
         val mAdView = findViewById<AdView> (R.id.adView)
@@ -37,7 +74,7 @@ class PayInApp : AppCompatActivity(), RewardedVideoAdListener {
         }
 
         // using Rewarded ads
-        mRewardedVideoAd = MobileAds.getRewardedVideoAdInstance(this)
+
         mRewardedVideoAd.rewardedVideoAdListener = this
         loadRewardedVideoAd()
         clickButtonR.setOnClickListener {
@@ -76,11 +113,13 @@ class PayInApp : AppCompatActivity(), RewardedVideoAdListener {
 
     override fun onRewardedVideoCompleted() {
         Toast.makeText(this, "onRewardedVideoCompleted", Toast.LENGTH_SHORT).show()
+        cardView.visibility = View.VISIBLE
     }
 
     override fun onRewardedVideoStarted() {
     }
 
     override fun onRewardedVideoAdFailedToLoad(p0: Int) {
+        Toast.makeText(this, "FAILED TO LOAD", Toast.LENGTH_SHORT).show()
     }
 }
